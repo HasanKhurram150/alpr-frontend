@@ -121,6 +121,12 @@ function PersonCard({ person, onEdit, onDelete, onView, onEnrollFace }: {
           </div>
           <div className="flex flex-wrap gap-1.5 mt-2.5">
             {person.plateNumbers.map(p => <span key={p} className="plate-badge text-[10px] py-0.5 px-2">{p}</span>)}
+            {(person as any).faceCount > 0 && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full"
+                style={{ color: '#30D158', background: 'rgba(48,209,88,0.1)' }}>
+                <Camera size={8} /> {(person as any).faceCount} face{(person as any).faceCount > 1 ? 's' : ''}
+              </span>
+            )}
           </div>
           {person.notes && <p className="text-[11px] text-slate-400 mt-2 line-clamp-1 italic font-medium">"{person.notes}"</p>}
         </div>

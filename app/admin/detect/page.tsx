@@ -451,7 +451,7 @@ function VideoDetector() {
       } finally {
         processingRef.current = false
       }
-    }, 'image/png')
+    }, 'image/jpeg', JPEG_QUALITY)
   }, [region])
 
   // ── RAF loop — capture gate + overlay drawing ─────────────────────────────
