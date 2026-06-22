@@ -380,6 +380,7 @@ function VideoDetector() {
   const [gunCount, setGunCount]         = useState(0)
   const [detFps, setDetFps]             = useState(0)
   const [feedFrames, setFeedFrames]     = useState<Array<DetectionResult & { videoTime: number }>>([])
+  const [platesOnly, setPlatesOnly]     = useState(true)  // skip face/vehicle models → much higher frame rate
 
   const inputRef   = useRef<HTMLInputElement>(null)
   const videoRef   = useRef<HTMLVideoElement>(null)
@@ -396,6 +397,7 @@ function VideoDetector() {
   const rafRef            = useRef<number | null>(null)
   const fpsWindow         = useRef<number[]>([])    // timestamps of recent detections
   const sessionIdRef      = useRef<string | null>(null) // current analysis session UUID
+  const platesOnlyRef     = useRef(true)            // mirrors platesOnly for the RAF loop
 
   const MIN_INTERVAL = 0.15  // seconds between frame captures
   const JPEG_QUALITY = 0.88
@@ -420,8 +422,9 @@ function VideoDetector() {
         const fd = new FormData()
         fd.append('image', blob, 'frame.jpg')
         const sid = sessionIdRef.current ? `&sessionId=${sessionIdRef.current}` : ''
+        const fast = platesOnlyRef.current ? '&faces=false&vehicles=false' : ''
         const res = await fetch(
-          `/api/alpr/detect?region=${region}&maxPlates=10&thumbnail=true${sid}`,
+          `/api/alpr/detect?region=${region}&maxPlates=10&thumbnail=true${sid}${fast}`,
           { method: 'POST', body: fd },
         )
         if (!res.ok) return
@@ -642,6 +645,13 @@ function VideoDetector() {
             {/* Controls */}
             <div className="flex items-center gap-3">
               <RegionSelect value={region} onChange={setRegion} disabled={active} />
+
+              <label className="flex items-center gap-2 text-sm select-none cursor-pointer"
+                title="Skip face & vehicle models per frame — much higher detection frame rate">
+                <input type="checkbox" checked={platesOnly} disabled={active}
+                  onChange={e => { setPlatesOnly(e.target.checked); platesOnlyRef.current = e.target.checked }} />
+                Plates only (fast)
+              </label>
 
               {!active ? (
                 <button onClick={startAnalysis}
