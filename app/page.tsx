@@ -1,2 +1,3 @@
-import { redirect } from 'next/navigation'
-export default function Root() { redirect('/dashboard') }
+export default function Root() {
+  return null;
+}

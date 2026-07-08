@@ -4,14 +4,14 @@ Next.js 16 (App Router) frontend for the ALPR system. Communicates with the Nest
 
 ## Stack
 
-| Layer | Choice |
-|-------|--------|
-| Framework | Next.js 16.2.4 (App Router, Turbopack) |
-| Language | TypeScript 5 |
-| Styling | Tailwind CSS 4 |
-| Data fetching | SWR 2 |
-| Icons | lucide-react 1.14 |
-| React | 19 |
+| Layer         | Choice                                 |
+| ------------- | -------------------------------------- |
+| Framework     | Next.js 16.2.4 (App Router, Turbopack) |
+| Language      | TypeScript 5                           |
+| Styling       | Tailwind CSS 4                         |
+| Data fetching | SWR 2                                  |
+| Icons         | lucide-react 1.14                      |
+| React         | 19                                     |
 
 ## Running
 
@@ -23,7 +23,8 @@ The backend must be running at `localhost:3000` for API calls to resolve. Start 
 
 ## Proxy Configuration
 
-`next.config.ts` rewrites `/api/:path*` → `http://localhost:3000/api/:path*`. This means:
+`next.config.ts` rewrites `/api/:path*` → `http://localhost:8000/api/:path*`. This means:
+
 - Every `fetch('/api/...')` call in the browser hits the Next.js dev server, which proxies it to NestJS.
 - No `NEXT_PUBLIC_API_URL` env var is needed — always use relative `/api/` paths.
 
@@ -56,21 +57,21 @@ alpr-frontend/
 ## Shared Types (`types/index.ts`)
 
 ```typescript
-PlateResult       // text, confidence, quality, boundingBox, thumbnail?, region?, state?,
-                  // personId?, personName?, vehicleMake?, vehicleModel?, vehicleColor?,
-                  // vehicleThumbnail?, direction?
-FaceResult        // boundingBox, confidence, quality, spoofScore?, spoofDetected?,
-                  // occluded?, personId?, personName?, thumbnail?
-VehicleResult     // make?, model?, color?, confidence, boundingBox, thumbnail?
-DetectionResult   // success, count, plates, faces, vehicles, processingTimeMs, gunDetected
-DetectionEvent    // id, plateText, confidence, source, personId?, personName?,
-                  // thumbnailBase64?, x/y/width/height, vehicleMake?, vehicleModel?,
-                  // vehicleColor?, vehicleThumbnail?, direction?, cameraId?, cameraName?,
-                  // gunDetected, timestamp
-Person            // id, name, plateNumbers[], notes?, createdAt, visits?
-WatchlistEntry    // id, plateText, reason?, active, createdAt
-Alert             // id, plateText, watchlistEntryId, detectionEventId, reason?, thumbnailBase64?, acknowledged, timestamp
-HealthStatus      // status, rocInitialized, modelPath, capabilities: { lpr, face, vehicle, gun }, error?
+PlateResult; // text, confidence, quality, boundingBox, thumbnail?, region?, state?,
+// personId?, personName?, vehicleMake?, vehicleModel?, vehicleColor?,
+// vehicleThumbnail?, direction?
+FaceResult; // boundingBox, confidence, quality, spoofScore?, spoofDetected?,
+// occluded?, personId?, personName?, thumbnail?
+VehicleResult; // make?, model?, color?, confidence, boundingBox, thumbnail?
+DetectionResult; // success, count, plates, faces, vehicles, processingTimeMs, gunDetected
+DetectionEvent; // id, plateText, confidence, source, personId?, personName?,
+// thumbnailBase64?, x/y/width/height, vehicleMake?, vehicleModel?,
+// vehicleColor?, vehicleThumbnail?, direction?, cameraId?, cameraName?,
+// gunDetected, timestamp
+Person; // id, name, plateNumbers[], notes?, createdAt, visits?
+WatchlistEntry; // id, plateText, reason?, active, createdAt
+Alert; // id, plateText, watchlistEntryId, detectionEventId, reason?, thumbnailBase64?, acknowledged, timestamp
+HealthStatus; // status, rocInitialized, modelPath, capabilities: { lpr, face, vehicle, gun }, error?
 ```
 
 ## API Client (`lib/api.ts`)
@@ -102,7 +103,7 @@ api.deleteAlert(id)
 ## SSE Hook (`lib/useSSE.ts`)
 
 ```typescript
-const { connected } = useSSE<T>(url, callback)
+const { connected } = useSSE<T>(url, callback);
 ```
 
 - Connects via `EventSource` to the given URL.
@@ -115,11 +116,13 @@ Used in: `layout.tsx` (alert count), `page.tsx` (dashboard feed + alerts), `even
 ## Page Summaries
 
 ### Dashboard (`/`)
+
 - 4 stat cards: detections today, registered persons, active alerts, watchlist entries.
 - Live detection feed: SSE at `/api/events/stream` prepends events; falls back to SWR polling every 30s.
 - Active alerts panel: SSE at `/api/alerts/stream` + SWR poll every 10s.
 
 ### Detection (`/detect`)
+
 - **Image tab**: drag-drop zone or click-to-upload. Region selector. Shows plate cards with thumbnail, confidence badge, bounding box overlay, person match, vehicle info.
 - **Video tab**: client-side frame capture (not server-side SSE video upload).
   - On start: generates a UUID `sessionId` via `crypto.randomUUID()` stored in `sessionIdRef`.
@@ -131,28 +134,33 @@ Used in: `layout.tsx` (alert count), `page.tsx` (dashboard feed + alerts), `even
 - **Live Feed tab**: RTSP/HTTP stream URL input. Monitoring for plates in real-time. Shows scrollable "Recent Detections" list (last 50 frames).
 
 ### Region selector
+
 - **North American / Pakistan ★** (`NORTH_AMERICAN`) — correct region for Pakistani plates. Labeled with ★ to guide users.
 - **Asian (East Asia)** (`ASIAN`) — East Asian plate formats only (Chinese/Japanese/Korean). **Do not use for Pakistani plates.**
 - Region order in selector: North American, European, Middle Eastern, Asian, Pacific, African, South American.
 
 ### Events Log (`/events`)
+
 - Table: thumbnail, plate badge, confidence badge (green ≥90%, amber ≥70%, red <70%), person name, source badge, timestamp.
 - Filters: plate text search, source dropdown. Clear button appears when filters active.
 - Pagination: 25 per page, previous/next controls, page indicator.
 - SSE banner: shows count of new events since last load; click to refresh.
 
 ### Persons (`/persons`)
+
 - Grid of cards showing name, notes, plate badges, date added.
 - Add/Edit modal: name field, textarea for plates (one per line), notes.
 - View History modal: lists all detection events for this person's plates, with thumbnails.
 
 ### Watchlist (`/watchlist`)
+
 - Grid of cards. Amber border/icon when active, muted when inactive.
 - Toggle button per card (ToggleRight/ToggleLeft) calls `PATCH /api/watchlist/:id { active }`.
 - "Active only" toggle at top filters the SWR key (`?activeOnly=true`).
 - Add modal: plate text (auto-uppercased), optional reason.
 
 ### Alerts (`/alerts`)
+
 - Table: thumbnail, plate, reason, status badge (Active in red / Acknowledged in grey), timestamp.
 - Acknowledge single row or "Acknowledge all" button (visible when unacknowledged > 0).
 - "Show acknowledged" toggle changes SWR key (omits `?acknowledged=false`).
@@ -163,12 +171,14 @@ Used in: `layout.tsx` (alert count), `page.tsx` (dashboard feed + alerts), `even
 The frontend follows a premium, high-fidelity Apple-inspired design language. Adhere to these patterns for all new UI work:
 
 ### Visual Principles
+
 - **Cleanliness**: Use white backgrounds with extremely soft, layered shadows (`box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03)`).
 - **Glassmorphism**: Use translucent backgrounds for persistent UI (Sidebar, TopBar, Modals) with `backdrop-filter: blur(20px) saturate(180%)`.
 - **Softness**: Standard border radius is `16px` for cards, `12px` for inputs/pills, and `24px` for modals.
 - **High Contrast**: Use deep blacks (`#1D1D1F`) for primary text and system gray (`#8E8E93`) for secondary.
 
 ### Color Palette (System Colors)
+
 - **Primary Blue**: `#007AFF` (Primary actions, active states)
 - **System Green**: `#30D158` (Success, resolved, low-priority)
 - **System Red**: `#FF3B30` (Alerts, errors, high-priority)
@@ -176,12 +186,14 @@ The frontend follows a premium, high-fidelity Apple-inspired design language. Ad
 - **System Background**: `#F2F2F7` (Main page background)
 
 ### Typography
+
 - **Font**: San Francisco (SF Pro) / System Default.
 - **Tracking**: Use slightly negative tracking for headings (`letter-spacing: -0.015em`).
 - **Data**: Use `font-mono` and `tabular-nums` for timestamps, IDs, and confidence scores.
 - **Badges**: Use `text-[10px]` or `text-[11px]` with `font-black` and `uppercase` for status indicators.
 
 ### UI Components
+
 - **Sidebar**: Fixed 240px width, `rgba(246,246,246,0.88)` background, blurred.
 - **TopBar**: 56px height, translucent white, refined 1px bottom border.
 - **Apple Card**: White background, soft shadow, `p-5` padding.
@@ -189,6 +201,7 @@ The frontend follows a premium, high-fidelity Apple-inspired design language. Ad
 - **Buttons**: `.btn-apple` for primary actions (Blue background, white text, bold).
 
 ### Animations
+
 - **`sfPulse`**: Subtle opacity pulse (2s) for live status dots.
 - **`sfPing`**: Scaled ring animation for critical alerts.
 - **Transitions**: Use `animate-in fade-in slide-in-from-bottom-4` for new content appearing.

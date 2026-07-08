@@ -103,8 +103,14 @@ export interface Person {
   plateNumbers: string[]
   notes?: string
   faceThumbnail?: string
+  faceCount?: number
   createdAt: string
   visits?: DetectionEvent[]
+}
+
+export interface VehicleStats {
+  makes: { make: string; count: string }[]
+  colors: { color: string; count: string }[]
 }
 
 export interface WatchlistEntry {

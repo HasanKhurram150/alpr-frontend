@@ -2,65 +2,140 @@
 @import "leaflet/dist/leaflet.css";
 
 :root {
-  --blue:    #007AFF;
-  --green:   #30D158;
-  --red:     #FF3B30;
-  --orange:  #FF9500;
-  --indigo:  #5856D6;
-  --teal:    #30B0C7;
-  --gray-1:  #1D1D1F;
-  --gray-2:  #3A3A3C;
-  --gray-3:  #6E6E73;
-  --gray-4:  #AEAEB2;
-  --gray-5:  #C7C7CC;
-  --gray-6:  #F2F2F7;
-  --fill-1:  rgba(120,120,128,0.2);
-  --fill-2:  rgba(120,120,128,0.16);
-  --fill-3:  rgba(120,120,128,0.12);
-  --separator: rgba(60,60,67,0.12);
+  /* Dynamic brand theme colors - Default: Dark Mode */
+  --brand-canvas: #003153;     /* Deep Space Blue */
+  --brand-content: #F0FFF0;    /* Mint White */
+  --brand-primary: #0A7E8C;    /* Deep Teal */
+  --brand-hover: #126180;      /* Deep Cerulean */
+  --brand-muted: #8DD9CC;      /* Seafoam Mint */
+  
+  --brand-card: #00223b;       /* Alternate Dark Blue for cards */
+  --brand-border: rgba(141, 217, 204, 0.2); /* Seafoam Mint with opacity */
+  --brand-header: #001c30;     /* Darker Space Blue for panels/headers */
+  --brand-highlight: #0A7E8C;  /* Teal for active states */
+
+  --blue: #0A7E8C;             /* Deep Teal */
+  --green: #30d158;
+  --red: #ff3b30;
+  --orange: #ff9500;
+  --indigo: #5856d6;
+  --teal: #0A7E8C;             /* Deep Teal */
+  
+  /* Adaptive grays for UI components */
+  --gray-1: #F0FFF0;
+  --gray-2: #8DD9CC;
+  --gray-3: #aeaeb2;
+  --gray-4: #6e6e73;
+  --gray-5: #3a3a3c;
+  --gray-6: #00223b;
+  --fill-1: rgba(141, 217, 204, 0.2);
+  --fill-2: rgba(141, 217, 204, 0.16);
+  --fill-3: rgba(141, 217, 204, 0.12);
+  --separator: rgba(141, 217, 204, 0.15);
 }
 
-* { 
-  -webkit-font-smoothing: antialiased; 
-  -moz-osx-font-smoothing: grayscale; 
+.light-mode {
+  /* Dynamic brand theme colors - Light Mode */
+  --brand-canvas: #F0FFF0;     /* Mint White */
+  --brand-content: #003153;    /* Deep Space Blue */
+  --brand-primary: #0A7E8C;    /* Deep Teal */
+  --brand-hover: #126180;      /* Deep Cerulean */
+  --brand-muted: #8DD9CC;      /* Seafoam Mint */
+
+  --brand-card: #ffffff;       /* Pure white card backgrounds */
+  --brand-border: rgba(10, 126, 140, 0.15); /* Deep teal/seafoam with opacity */
+  --brand-header: #e8f7f2;     /* Soft mint white for headers */
+  --brand-highlight: #0A7E8C;  /* Teal for active states */
+
+  --blue: #0A7E8C;             /* Deep Teal */
+  --teal: #0A7E8C;             /* Deep Teal */
+  
+  --gray-1: #003153;
+  --gray-2: #126180;
+  --gray-3: #6e6e73;
+  --gray-4: #aeaeb2;
+  --gray-5: #c7c7cc;
+  --gray-6: #f2f2f7;
+  --fill-1: rgba(10, 126, 140, 0.12);
+  --fill-2: rgba(10, 126, 140, 0.08);
+  --fill-3: rgba(10, 126, 140, 0.04);
+  --separator: rgba(10, 126, 140, 0.1);
+}
+
+@theme {
+  --color-brand-canvas: var(--brand-canvas);
+  --color-brand-content: var(--brand-content);
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-card: var(--brand-card);
+  --color-brand-border: var(--brand-border);
+  --color-brand-header: var(--brand-header);
+  --color-brand-highlight: var(--brand-highlight);
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
-  background: #F2F2F7;
-  color: #1D1D1F;
+  font-family:
+    var(--font-main),
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    "SF Pro Display",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  background: var(--brand-canvas);
+  color: var(--brand-content);
   font-size: 15px;
   margin: 0;
 }
 
 .plate-badge {
-  font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+  font-family: "SF Mono", "Fira Code", "Courier New", monospace;
   font-weight: 700;
   letter-spacing: 0.14em;
-  background: #FFFDE7;
-  border: 1.5px solid #D4A017;
+  background: #fffde7;
+  border: 1.5px solid #d4a017;
   border-radius: 5px;
   padding: 2px 9px;
   font-size: 0.8125rem;
   display: inline-block;
   text-transform: uppercase;
-  color: #1A1600;
+  color: #1a1600;
 }
 
 /* Live pulse — subtle, not flashy */
-.pulse-dot { 
-  animation: sfPulse 2s ease-in-out infinite; 
+.pulse-dot {
+  animation: sfPulse 2s ease-in-out infinite;
 }
 
 @keyframes sfPulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.4; transform: scale(0.85); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
 }
 
 @keyframes sfPing {
-  0%   { transform: scale(1);   opacity: 0.6; }
-  100% { transform: scale(2.2); opacity: 0; }
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
 }
 
 .live-ring {
@@ -71,7 +146,7 @@ body {
 }
 
 .live-ring::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: 50%;
@@ -80,7 +155,7 @@ body {
 }
 
 .live-ring::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: 50%;
@@ -88,19 +163,41 @@ body {
 }
 
 /* Scrollbar — macOS-style overlay */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); border-radius: 100px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
 
-/* Drop zone active state */
 .drop-active {
-  border-color: #007AFF !important;
-  background:   rgba(0,122,255,0.06) !important;
+  border-color: #0A7E8C !important;
+  background: rgba(10, 126, 140, 0.06) !important;
 }
 
 /* Smooth tap highlight removal on mobile */
-button, a { -webkit-tap-highlight-color: transparent; outline: none; }
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible) {
+  outline: none;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #0A7E8C;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
 
 .glass-panel {
   background: rgba(255, 255, 255, 0.7);
@@ -110,22 +207,28 @@ button, a { -webkit-tap-highlight-color: transparent; outline: none; }
 }
 
 .apple-card {
-  background: #FFFFFF;
-  border-radius: 16px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: #ffffff;
+  border-radius: 6px;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.03);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .apple-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.06);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
 .btn-apple {
-  background: var(--blue);
-  color: white;
+  background: #e8a000;
+  color: black;
   padding: 8px 16px;
-  border-radius: 10px;
+  border-radius: 1rem; /* rounded-2xl */
   font-weight: 600;
   font-size: 14px;
   transition: all 0.2s ease;
@@ -133,11 +236,100 @@ button, a { -webkit-tap-highlight-color: transparent; outline: none; }
   cursor: pointer;
 }
 
+.light-mode .btn-apple,
+.light-mode.ops-page .btn-apple,
+.ops-page.light-mode .btn-apple {
+  background: var(--blue);
+  color: white;
+}
+
 .btn-apple:hover {
-  filter: brightness(1.1);
-  transform: scale(1.02);
+  filter: brightness(1.08);
 }
 
 .btn-apple:active {
-  transform: scale(0.98);
+  filter: brightness(0.95);
+}
+
+/* Apple Switch Toggle style */
+.apple-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.apple-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.apple-switch-slider {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background-color: rgba(120, 120, 128, 0.2);
+  border-radius: 9999px;
+  transition: background-color 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.apple-switch-slider::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Checked state */
+.apple-switch input:checked + .apple-switch-slider {
+  background-color: var(--blue);
+}
+
+.apple-switch-amber input:checked + .apple-switch-slider {
+  background-color: #ff9500;
+}
+
+.apple-switch input:checked + .apple-switch-slider::before {
+  transform: translateX(16px);
+}
+
+/* Disabled state */
+.apple-switch input:disabled + .apple-switch-slider {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Hide default browser number input spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Custom styled select elements */
+select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238E8E93' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: 14px !important;
+  padding-right: 36px !important;
+}
+
+:not(.light-mode) select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2378899a' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9'/%3E%3C/svg%3E") !important;
 }

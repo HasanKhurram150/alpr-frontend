@@ -17,7 +17,7 @@ interface Sighting {
 
 // Colour sequence: start=blue, mid=orange, end=green
 function pinColor(index: number, total: number) {
-  if (index === 0) return { bg: '#007AFF', shadow: 'rgba(0,122,255,0.5)' }
+  if (index === 0) return { bg: '#0A7E8C', shadow: 'rgba(10, 126, 140, 0.5)' }
   if (index === total - 1) return { bg: '#30D158', shadow: 'rgba(48,209,88,0.5)' }
   return { bg: '#FF9500', shadow: 'rgba(255,149,0,0.5)' }
 }
@@ -59,7 +59,7 @@ function AnimatedTrail({ points }: { points: [number, number][] }) {
 
     // Glow base line
     const glow = L.polyline(points, {
-      color: '#007AFF',
+      color: '#0A7E8C',
       weight: 10,
       opacity: 0.15,
       lineJoin: 'round',
@@ -68,7 +68,7 @@ function AnimatedTrail({ points }: { points: [number, number][] }) {
 
     // Solid trail
     const trail = L.polyline(points, {
-      color: '#007AFF',
+      color: '#0A7E8C',
       weight: 3,
       opacity: 0.9,
       lineJoin: 'round',
@@ -186,7 +186,7 @@ export default function JourneyMap({ sightings, plateText }: { sightings: Sighti
                   <img
                     src={`data:image/jpeg;base64,${s.thumbnailBase64}`}
                     alt="plate"
-                    style={{ width: '100%', height: 72, objectFit: 'cover', borderRadius: 8, marginBottom: 8 }}
+                    style={{ width: '100%', height: 72, objectFit: 'cover', borderRadius: 16, marginBottom: 8 }}
                   />
                 )}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
@@ -205,7 +205,7 @@ export default function JourneyMap({ sightings, plateText }: { sightings: Sighti
                   {s.cameraName ?? s.cameraId ?? 'Camera'}
                 </p>
                 {s.zone && (
-                  <p style={{ margin: '2px 0', fontSize: 11, color: '#007AFF', fontWeight: 600 }}>
+                  <p style={{ margin: '2px 0', fontSize: 11, color: '#0A7E8C', fontWeight: 600 }}>
                     📍 {s.zone}
                   </p>
                 )}
@@ -234,7 +234,7 @@ export default function JourneyMap({ sightings, plateText }: { sightings: Sighti
         <div style={{
           background: 'rgba(10,10,20,0.75)',
           backdropFilter: 'blur(12px)',
-          borderRadius: 10, padding: '6px 12px',
+          borderRadius: 16, padding: '6px 12px',
           border: '1px solid rgba(255,255,255,0.08)',
           display: 'flex', alignItems: 'center', gap: 8,
         }}>
@@ -258,7 +258,7 @@ export default function JourneyMap({ sightings, plateText }: { sightings: Sighti
         display: 'flex', gap: 8, pointerEvents: 'none',
       }}>
         {[
-          { color: '#007AFF', label: 'Entry' },
+          { color: '#0A7E8C', label: 'Entry' },
           { color: '#FF9500', label: 'Transit' },
           { color: '#30D158', label: 'Last seen' },
         ].map(({ color, label }) => (

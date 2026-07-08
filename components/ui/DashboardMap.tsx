@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import { Camera, Journey } from '@/types'
 
-const TRAIL_COLORS = ['#007AFF', '#FF3B30', '#5856D6', '#FF9500', '#30D158', '#FF2D55', '#AC8E68']
+const TRAIL_COLORS = ['#0A7E8C', '#FF3B30', '#5856D6', '#FF9500', '#30D158', '#FF2D55', '#AC8E68']
 
 function injectStyles() {
   if (typeof document === 'undefined' || document.getElementById('dashmap-styles')) return
@@ -146,7 +146,7 @@ export default function DashboardMap({
                 {cam.name}
               </p>
               {cam.zone && (
-                <p style={{ fontSize: 11, color: '#007AFF', fontWeight: 600, margin: '0 0 5px' }}>
+                <p style={{ fontSize: 11, color: '#0A7E8C', fontWeight: 600, margin: '0 0 5px' }}>
                   📍 {cam.zone}
                 </p>
               )}

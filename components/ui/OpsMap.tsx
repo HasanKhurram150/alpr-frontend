@@ -169,6 +169,18 @@ function PlateTrailLayer({ trail }: { trail: PlateTrailPoint[] }) {
   return null
 }
 
+function MapResizer() {
+  const map = useMap()
+  useEffect(() => {
+    const observer = new ResizeObserver(() => {
+      map.invalidateSize()
+    })
+    observer.observe(map.getContainer())
+    return () => observer.disconnect()
+  }, [map])
+  return null
+}
+
 export default function OpsMap({ cameras, journeys, plateTrail = [], isLightMode = false }: { cameras: Camera[]; journeys: Journey[]; plateTrail?: PlateTrailPoint[]; isLightMode?: boolean }) {
   useEffect(() => { injectStyles() }, [])
 
@@ -194,6 +206,7 @@ export default function OpsMap({ cameras, journeys, plateTrail = [], isLightMode
         subdomains="abcd"
         maxZoom={20}
       />
+      <MapResizer />
       {plateTrail.length === 0 && <FitAll points={cameraPoints} />}
       <PlateTrailLayer trail={plateTrail} />
       {camerasWithGps.map(cam => (

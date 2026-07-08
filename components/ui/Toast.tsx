@@ -12,7 +12,7 @@ const config: Record<Kind, { icon: any; color: string; bg: string }> = {
   success: { icon: CheckCircle,  color: '#30D158', bg: 'rgba(48,209,88,0.1)' },
   error:   { icon: XCircle,      color: '#FF3B30', bg: 'rgba(255,59,48,0.1)' },
   warning: { icon: AlertTriangle, color: '#FF9500', bg: 'rgba(255,149,0,0.1)' },
-  info:    { icon: Info,         color: '#007AFF', bg: 'rgba(0,122,255,0.1)' },
+  info:    { icon: Info,         color: '#0A7E8C', bg: 'rgba(10, 126, 140, 0.1)' },
 }
 
 export function ToastProvider({ children }: { children: ReactNode }) {
@@ -49,8 +49,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               <span className="text-sm font-semibold flex-1 tracking-tight" style={{ color: '#1D1D1F' }}>{t.message}</span>
               <button
                 onClick={() => setToasts(ts => ts.filter(x => x.id !== t.id))}
-                style={{ color: '#AEAEB2' }}
-                className="hover:text-slate-600 transition-colors ml-1"
+                className="text-[#AEAEB2] hover:text-slate-700 transition-colors ml-1"
               >
                 <X size={14} strokeWidth={2.5} />
               </button>
